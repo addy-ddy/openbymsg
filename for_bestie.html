@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BTS Envelope Reveal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    @keyframes jiggle {
+  0% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+  100% { transform: rotate(-2deg); }
+}
+
+    body {
+      height: 100vh;
+      background: radial-gradient(ellipse at center, #491a74 0%, #17002d 100%);
+      background-color: #2e004f;
+      background-image:
+        radial-gradient(#ffffff 1px, transparent 1px),
+        radial-gradient(rgba(255,255,255,0.8) 1.5px, transparent 1.5px),
+        radial-gradient(#d8c6ff 2px, transparent 2px),
+        radial-gradient(rgba(255,255,255,0.4) 3px, transparent 3px);
+      background-size:
+        120px 120px,
+        160px 160px,
+        200px 200px,
+        300px 300px;
+      background-position:
+        0 0,
+        80px 80px,
+        150px 150px,
+        200px 200px;
+      animation: sparkleDrift 25s infinite linear;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    @keyframes sparkleDrift {
+      0% { background-position: 0 0, 80px 80px, 150px 150px, 200px 200px; }
+      50% { background-position: 40px 40px, 120px 120px, 190px 190px, 240px 240px; }
+      100% { background-position: 0 0, 80px 80px, 150px 150px, 200px 200px; }
+    }
+
+    .envelope {
+  position: relative;
+  width: 300px;
+  height: 200px;
+  background: linear-gradient(145deg, #6e1ab5, #b04ed3);
+  border-radius: 15px;
+  box-shadow: 0 0 20px #9e5eff;
+  z-index: 2;
+  cursor: pointer;
+  animation: jiggle 1s infinite ease-in-out;
+}
+
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      background: linear-gradient(145deg, #b474f5, #8635ce);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      transition: transform 0.6s ease;
+    }
+
+    .flap.open {
+      transform: rotateX(100deg);
+    }
+
+    .card {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) translateY(30px);
+      width: 260px;
+      height: 180px;
+      opacity: 0;
+      transition: all 1s ease-out;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .card.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) translateY(-60px);
+      pointer-events: auto;
+    }
+
+    .inner {
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      position: relative;
+      transition: transform 1s ease;
+    }
+
+    .inner.flip {
+      transform: rotateY(180deg);
+    }
+
+    .side {
+  font-family: 'Dancing Script', cursive;
+  color: #c59ded;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #d49fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  padding: 15px;
+  text-align: center;
+}
+.front {
+  background: #fdf2ff;
+}
+.back {
+  background: #ffe1f7;
+  transform: rotateY(180deg);
+  color: #ff8db4;
+}
+
+.front {
+  background: #fdf2ff;
+}
+.back {
+  background: #ffe1f7;
+  transform: rotateY(180deg);
+  color: #ffc1e3;
+}
+
+
+    .front {
+      background: #fdf2ff;
+    }
+
+    .back {
+      background: #ffe1f7;
+      transform: rotateY(180deg);
+    }
+
+    @media screen and (max-width: 500px) {
+      .envelope {
+        width: 90vw;
+        height: 60vw;
+      }
+      .card {
+        width: 80vw;
+        height: 55vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="envelope" onclick="toggleEnvelope()">
+    <div class="flap" id="flap"></div>
+    <div class="card" id="card">
+      <div class="inner" id="inner" onclick="flipCard(event)">
+        <div class="side front">💌 "for everyday till now, and for everyday to come, i want you to be my best friend, my soulmate"</div>
+        <div class="side back">happy friendship day kritu </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const flap = document.getElementById("flap");
+    const card = document.getElementById("card");
+    const inner = document.getElementById("inner");
+
+    let isOpen = false;
+
+    function toggleEnvelope() {
+      isOpen = !isOpen;
+
+      flap.classList.toggle("open", isOpen);
+      card.classList.toggle("show", isOpen);
+
+      if (!isOpen) {
+        inner.classList.remove("flip"); // reset flip when closing
+      }
+    }
+
+    function flipCard(event) {
+      event.stopPropagation(); // prevent envelope from closing when card is tapped
+      inner.classList.toggle("flip");
+    }
+  </script>
+</body>
+</html>
